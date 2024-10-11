@@ -8,6 +8,7 @@ const InventoryViewContainer = styled.div`
   display: flex;
   height: 70vh;
 `;
+
 const Grid = styled.div`
   flex: 5;
   display: grid;

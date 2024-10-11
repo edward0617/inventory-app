@@ -7,6 +7,7 @@ const TimerContainer = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 `;
 
 const TimerLabel = styled.div`

@@ -36,9 +36,9 @@ export const InventoryProvider = ({ children }) => {
         const inRange = item.id >= range[0] && item.id <= range[1];
 
         return inRange && ((((isEven && checkEven) ||
-        (isOdd && checkOdd)) ||
-        (isPrime && checkPrime)) ||
-        (endsWith && endsWithCheck))
+          (isOdd && checkOdd)) ||
+          (isPrime && checkPrime)) ||
+          (endsWith && endsWithCheck))
       });
       setFilteredInventory(result);
     }
@@ -48,8 +48,12 @@ export const InventoryProvider = ({ children }) => {
   const loadInventory = useCallback(async () => {
     const ids = Array.from({ length: 1000 }, () => Math.floor(Math.random() * 1000));
     const inventoryData = ids.map(id => ({
-      id,
-      image: `https://picsum.photos/id/${id % 1000}/200/300`
+      id: id,
+      images: [
+        `https://picsum.photos/id/${id % 1000}/200/300`,
+        `https://picsum.photos/id/${(id + 1) % 1000}/200/300`,
+        `https://picsum.photos/id/${(id + 2) % 1000}/200/300`
+      ]
     }))
     setInventory(inventoryData);
     setFilteredInventory(inventoryData);
@@ -68,11 +72,11 @@ export const InventoryProvider = ({ children }) => {
       inventory,
       selectedItems,
       filters,
+      filteredInventory,
       addSelectedItem,
       removeSelectedItem,
       loadInventory,
       setFilters,
-      filteredInventory
     }}>
       {children}
     </InventoryContext.Provider>
