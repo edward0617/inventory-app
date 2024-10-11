@@ -2,9 +2,21 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const TimerContainer = styled.div`
-  padding: 20px;
+  flex: 1;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TimerLabel = styled.div`
+  border: 1px solid #aaa;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
   font-size: 24px;
   font-weight: bold;
+  background-color: white;
 `;
 
 const TimerBox = ({ start, reset }) => {
@@ -27,7 +39,9 @@ const TimerBox = ({ start, reset }) => {
 
   return (
     <TimerContainer>
-      {Math.floor(time / 60)}:{time % 60 < 10 ? `0${time % 60}` : time % 60}
+      <TimerLabel>
+        {Math.floor(time / 60)}:{time % 60 < 10 ? `0${time % 60}` : time % 60}
+      </TimerLabel>
     </TimerContainer>
   );
 };

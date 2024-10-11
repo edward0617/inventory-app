@@ -1,38 +1,61 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "styled-components";
 import InventoryCard from "./InventoryCard";
+import { InventoryContext } from "../context/InventoryContext";
+import InventoryFilter from "./InventoryFilter";
 
+const InventoryViewContainer = styled.div`
+  display: flex;
+  height: 70vh;
+`;
 const Grid = styled.div`
+  flex: 5;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 10px;
   padding: 20px;
+  justify-content: center;
+  max-height: 70vh;
+  overflow-y: auto;
+  margin-bottom: 20px;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+
+    &:hover {
+      background: #555;
+    }
+  }
 `;
 
 const InventoryView = () => {
-  const [inventory, setInventory] = useState([]);
+  const { filteredInventory, loadInventory } = useContext(InventoryContext);
 
   useEffect(() => {
-    const fetchInventory = async () => {
-      const ids = Array.from({ length: 1000 }, () =>
-        Math.floor(Math.random() * 100000)
-      );
-      const inventoryData = ids.map((id) => ({
-        id,
-        image: `https://picsum.photos/id/${id % 1000}/200/300`,
-      }));
-      setInventory(inventoryData);
-    };
-
-    fetchInventory();
-  }, []);
+    loadInventory();
+  }, [loadInventory]);
 
   return (
-    <Grid>
-      {inventory.map((item) => (
-        <InventoryCard key={item.id} id={item.id} image={item.image} />
-      ))}
-    </Grid>
+    <InventoryViewContainer>
+      <Grid>
+        {Array.isArray(filteredInventory) &&
+          filteredInventory.map((item, key) => (
+            <InventoryCard
+              key={`${key}${item.id}`}
+              imageItem={item}
+            />
+          ))}
+      </Grid>
+      <InventoryFilter />
+    </InventoryViewContainer>
   );
 };
 
