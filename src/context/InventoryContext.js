@@ -25,23 +25,17 @@ export const InventoryProvider = ({ children }) => {
 
   const applyFilters = useCallback(() => {
     const { isEven, isOdd, isPrime, endsWith, range } = filters;
-    if ((isEven || isOdd || isPrime) === false) {
-      setFilteredInventory(inventory);
-    } else {
-      let result = inventory.filter(item => {
-        const checkEven = isEven && item.id % 2 === 0;
-        const checkOdd = isOdd && item.id % 2 !== 0;
-        const checkPrime = isPrime && isPrimeCheck(item.id);
-        const endsWithCheck = item.id.toString().endsWith(endsWith);
-        const inRange = item.id >= range[0] && item.id <= range[1];
+    let result = inventory.filter(item => {
+      const id = item.id;
+      const checkEven = isEven ? id % 2 === 0 : true;
+      const checkOdd = isOdd ? id % 2 !== 0 : true;;
+      const checkPrime = isPrime ? isPrimeCheck(id) : true;
+      const endsWithCheck = endsWith ? id.toString().endsWith(endsWith) : true;
+      const inRange = id >= range[0] && id <= range[1];
 
-        return inRange && ((((isEven && checkEven) ||
-          (isOdd && checkOdd)) ||
-          (isPrime && checkPrime)) ||
-          (endsWith && endsWithCheck))
-      });
-      setFilteredInventory(result);
-    }
+      return checkEven && checkOdd && checkPrime && endsWithCheck && inRange;
+    });
+    setFilteredInventory(result);
   }, [filters, inventory])
 
 
