@@ -5,67 +5,64 @@ import InventoryCard from "./InventoryCard";
 import { useDrop } from "react-dnd";
 import TimerBox from "./TimerBox";
 
-
 const DropContainer = styled.div`
-  height: "30vh";
-  backgroundColor: "#f0f0f0";
-  padding: "10px";
-`
+  flex: 1;
+  background-color: #ccc;
+  border: 10px solid #eee;
+`;
 const SelectionContainer = styled.div`
   display: flex;
-  height: 30vh;
 `;
 
 const Grid = styled.div`
-  flex: 5;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 10px;
-  padding: 20px;
-  justify-content: center;
-  max-height: 30vh;
-  overflow-y: auto;
-  margin-bottom: 20px;
+flex: 5;
+display: grid;
+background-color: #ccc;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+padding: 10px;
+justify-content: center;
+max-height: 280px;
+overflow-y: auto;
 
-  &::-webkit-scrollbar {
-    width: 10px;
+&::-webkit-scrollbar {
+  width: 10px;
+}
+
+&::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+&::-webkit-scrollbar-thumb {
+  background: #888;
+
+  &:hover {
+    background: #555;
   }
-
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-
-    &:hover {
-      background: #555;
-    }
-  }
+}
 `;
 
 const SelectionView = () => {
-  const { selectedItems, addSelectedItem } =
-    useContext(InventoryContext);
+  const { selectedItems, addSelectedItem } = useContext(InventoryContext);
 
   const [, drop] = useDrop(() => ({
     accept: "card",
     drop: (item, monitor) => {
-      addSelectedItem(item);
+      if (item.selectedItemsIndex === -1) {
+        addSelectedItem(item);
+      }
     },
   }));
 
   return (
-    <DropContainer
-      ref={drop}
-    >
+    <DropContainer ref={drop}>
       <SelectionContainer>
         <Grid>
-          {selectedItems.map((item) => (
+          {selectedItems.map((item, index) => (
             <InventoryCard
-              key={item.id}
+              key={`${item.id}${index}`}
               imageItem={item}
-              isDraggable={false}
+              isDraggable={true}
+              selectedItemsIndex={index}
             />
           ))}
         </Grid>

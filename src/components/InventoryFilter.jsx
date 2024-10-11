@@ -4,10 +4,10 @@ import { InventoryContext } from "../context/InventoryContext";
 
 const FilterContainer = styled.div`
   flex: 1;
-  padding: 20px;
-  border-right: 1px solid #ccc;
-  height: 100%;
-  background: #f7f7f7;
+  background-color: #fff;
+  border: 10px solid #ccc;
+  border-left: 0px;
+  padding-left: 10px;
 `;
 
 const FilterTitle = styled.h3`

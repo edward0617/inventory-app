@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { InventoryContext } from "../context/InventoryContext";
 import styled from "styled-components";
-import { useDrag } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 
 const DragContainer = styled.div`
   display: flex;
@@ -17,12 +18,15 @@ const DragContainer = styled.div`
 `;
 
 const Image = styled.img`
-  width: 100%;
-  height: auto;
+  width: 200px;
+  height: 170px;
   border-radius: 5px;
+  object-fit: cover;
 `;
 
 const IDText = styled.p`
+  justify-content: center;
+  align-items: center;
   color: #333;
   font-size: 16px;
   margin-top: 10px;
@@ -41,11 +45,16 @@ const Indicator = styled.span`
   color: ${(props) => (props.isActive ? "#000" : "#bbb")};
 `;
 
-const InventoryCard = ({ imageItem, isDraggable = true }) => {
-  const [{ isDragging }, drag, preview] = useDrag(
+const InventoryCard = ({
+  imageItem,
+  isDraggable = true,
+  selectedItemsIndex = -1,
+}) => {
+  const { moveCard } = useContext(InventoryContext);
+  const [{ isDragging }, drag] = useDrag(
     () => ({
       type: "card",
-      item: { id: imageItem.id, images: imageItem.images },
+      item: { id: imageItem.id, images: imageItem.images, selectedItemsIndex },
       canDrag: isDraggable,
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
@@ -54,6 +63,15 @@ const InventoryCard = ({ imageItem, isDraggable = true }) => {
     [isDraggable]
   );
 
+  const [, drop] = useDrop(() => ({
+    accept: "card",
+    drop: (item, monitor) => {
+      if (item.selectedItemsIndex > -1) {
+        moveCard(item.selectedItemsIndex, selectedItemsIndex);
+      }
+    },
+  }));
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleIndicatorClick = (index) => {
@@ -61,23 +79,25 @@ const InventoryCard = ({ imageItem, isDraggable = true }) => {
   };
 
   return (
-    <DragContainer ref={isDraggable ? drag : preview} isDragging={isDragging}>
-      <Image
-        src={imageItem.images[currentImageIndex]}
-        alt={`Inventory item ${imageItem.id + currentImageIndex}`}
-      />
-      <CarouselIndicators>
-        {imageItem.images.map((_, index) => (
-          <Indicator
-            key={index}
-            isActive={index === currentImageIndex}
-            onClick={() => handleIndicatorClick(index)}
-          >
-            &#9679;
-          </Indicator>
-        ))}
-      </CarouselIndicators>
-      <IDText>ID: {imageItem.id + currentImageIndex}</IDText>
+    <DragContainer ref={drag} isDragging={isDragging}>
+      <div ref={drop}>
+        <Image
+          src={imageItem.images[currentImageIndex]}
+          alt={`Inventory item ${imageItem.id + currentImageIndex}`}
+        />
+        <CarouselIndicators>
+          {imageItem.images.map((_, index) => (
+            <Indicator
+              key={index}
+              isActive={index === currentImageIndex}
+              onClick={() => handleIndicatorClick(index)}
+            >
+              &#9679;
+            </Indicator>
+          ))}
+        </CarouselIndicators>
+        <IDText>ID: {imageItem.id + currentImageIndex}</IDText>
+      </div>
     </DragContainer>
   );
 };

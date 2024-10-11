@@ -13,7 +13,7 @@ const App = () => {
     <DndProvider backend={HTML5Backend}>
       <InventoryProvider>
           <Router>
-            <div style={{ display: 'flex', flexDirection: 'column', flex: 5}}>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100vh'}}>
               <Routes>
                 <Route path="/" element={
                   <>

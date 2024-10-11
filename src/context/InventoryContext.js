@@ -19,6 +19,16 @@ export const InventoryProvider = ({ children }) => {
     setSelectedItems(prevItems => [...prevItems, item]);
   }, []);
 
+  const moveCard = useCallback((from, to) => {
+    setSelectedItems(prevItems => {
+      const newItems = [...prevItems];
+      const draggedItem = newItems[from];
+      newItems.splice(from, 1);
+      newItems.splice(to, 0, draggedItem);
+      return newItems;
+    })
+  }, []);
+
   const removeSelectedItem = useCallback(id => {
     setSelectedItems(prevItems => prevItems.filter(item => item.id !== id));
   }, []);
@@ -67,6 +77,7 @@ export const InventoryProvider = ({ children }) => {
       selectedItems,
       filters,
       filteredInventory,
+      moveCard,
       addSelectedItem,
       removeSelectedItem,
       loadInventory,

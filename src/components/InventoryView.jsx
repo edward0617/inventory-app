@@ -5,20 +5,21 @@ import { InventoryContext } from "../context/InventoryContext";
 import InventoryFilter from "./InventoryFilter";
 
 const InventoryViewContainer = styled.div`
+  flex: 3;
   display: flex;
-  height: 70vh;
-`;
-
-const Grid = styled.div`
+  border: 10px solid #eee;
+`
+  
+  const Grid = styled.div`
+  border-bottom: 10px solid #ccc;
   flex: 5;
   display: grid;
+  background-color: #ccc;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 10px;
-  padding: 20px;
+  padding: 10px;
   justify-content: center;
-  max-height: 70vh;
+  max-height: 780px;
   overflow-y: auto;
-  margin-bottom: 20px;
 
   &::-webkit-scrollbar {
     width: 10px;
@@ -49,10 +50,7 @@ const InventoryView = () => {
       <Grid>
         {Array.isArray(filteredInventory) &&
           filteredInventory.map((item, key) => (
-            <InventoryCard
-              key={`${key}${item.id}`}
-              imageItem={item}
-            />
+            <InventoryCard key={`${key}${item.id}`} imageItem={item} />
           ))}
       </Grid>
       <InventoryFilter />
