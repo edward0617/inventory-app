@@ -39,7 +39,7 @@ const InventoryViewContainer = styled.div`
 `;
 
 const InventoryView = () => {
-  const { filteredInventory, loadInventory } = useContext(InventoryContext);
+  const { filteredInventory, loadInventory, inventory} = useContext(InventoryContext);
 
   useEffect(() => {
     loadInventory();
@@ -48,8 +48,10 @@ const InventoryView = () => {
   return (
     <InventoryViewContainer>
       <Grid>
-        {Array.isArray(filteredInventory) &&
+        {Array.isArray(filteredInventory) && filteredInventory.length > 0 ?
           filteredInventory.map((item, key) => (
+            <InventoryCard key={`${key}${item.id}`} imageItem={item} />
+          )) : inventory.map((item, key) => (
             <InventoryCard key={`${key}${item.id}`} imageItem={item} />
           ))}
       </Grid>

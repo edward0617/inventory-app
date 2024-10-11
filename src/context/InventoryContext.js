@@ -60,7 +60,6 @@ export const InventoryProvider = ({ children }) => {
       ]
     }))
     setInventory(inventoryData);
-    setFilteredInventory(inventoryData);
   }, []);
 
   useEffect(() => {
